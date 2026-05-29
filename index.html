@@ -243,6 +243,69 @@
     </footer>
 
   </div><!-- end page-home -->
+<!--  GAME PAGE  -->
+  <div id="page-game" class="page">
+    <div style="padding: 32px 48px;">
+
+      <div class="game-topbar">
+        <h1 class="game-title">⌨️ Zone de frappe</h1>
+        <div class="game-controls">
+          <select class="select-styled" id="lang-select" onchange="rebuildWordList()">
+            <option value="fr">🇫🇷 Français</option>
+            <option value="en">🇬🇧 English</option>
+          </select>
+          <select class="select-styled" id="mode-select" onchange="rebuildWordList()">
+            <option value="easy">Facile</option>
+            <option value="medium">Moyen</option>
+            <option value="hard">Difficile</option>
+          </select>
+          <select class="select-styled" id="count-select" onchange="rebuildWordList()">
+            <option value="20">20 mots</option>
+            <option value="30" selected>30 mots</option>
+            <option value="50">50 mots</option>
+          </select>
+          <button class="btn-primary" onclick="restartGame()" style="padding:8px 18px;font-size:13px;">↺ Restart</button>
+        </div>
+      </div>
+
+      <div class="game-stats-bar">
+        <div class="gstat">
+          <div class="gstat-label">WPM actuel</div>
+          <div class="gstat-val orange" id="live-wpm">—</div>
+        </div>
+        <div class="gstat">
+          <div class="gstat-label">Précision</div>
+          <div class="gstat-val green" id="live-acc">—</div>
+        </div>
+        <div class="gstat">
+          <div class="gstat-label">Mots tapés</div>
+          <div class="gstat-val" id="live-words">0</div>
+        </div>
+        <div class="gstat">
+          <div class="gstat-label">Temps</div>
+          <div class="gstat-val purple" id="live-time">0s</div>
+        </div>
+      </div>
+
+      <div class="word-area">
+        <div id="word-display"></div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="input-wrap">
+        <input type="text" id="input-field" placeholder="Commencez à taper…" autocomplete="off" autocorrect="off" spellcheck="false">
+        <span class="input-hint">Espace = mot suivant</span>
+      </div>
+
+      <div class="restart-hint">Appuyez sur <kbd style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:var(--font-mono);font-size:11px;">Tab</kbd> pour recommencer</div>
+
+      <div class="game-tip" id="game-tip">☕ Astuce : <span id="tip-text">En Java, toString() est appelée automatiquement quand vous afficher un objet avec System.out.println()</span></div>
+
+    </div>
+  </div>
+  <!-- end page-game -->
 
 
 
