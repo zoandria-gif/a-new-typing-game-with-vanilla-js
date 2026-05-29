@@ -104,3 +104,20 @@ modeSelect.addEventListener("change", () => startTest());
 
 // Start the test
 startTest();
+
+// ===== NAVIGATION ENTRE LES PAGES =====
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  document.getElementById('page-' + page).classList.add('active');
+  var navEl = document.querySelector('[data-page="' + page + '"]');
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+  if (page === 'game') {
+    setTimeout(function() { document.getElementById('input-field').focus(); }, 100);
+  }
+}
+
+document.querySelectorAll('.nav-item[data-page]').forEach(function(btn) {
+  btn.addEventListener('click', function() { navigate(btn.dataset.page); });
+});
