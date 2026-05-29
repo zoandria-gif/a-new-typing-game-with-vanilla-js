@@ -303,3 +303,107 @@ let gameState = {
   defPoolIndex: 0,    
   batchSize: 3        
 };
+
+// ===== LOGIQUE FLUX DE TEXTE =====
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function getLang()  { return document.getElementById('lang-select').value; }
+function getDiff()  { return document.getElementById('mode-select').value; }
+function isCountdownMode() { return document.getElementById('timer-select').value !== 'words'; }
+
+function getCountdownSeconds() {
+  var val = document.getElementById('timer-select').value;
+  if (val === '30')  return 30;
+  if (val === '60')  return 60;
+  if (val === '90')  return 90;
+  if (val === '120') return 120;
+  return 0;
+}
+
+function rebuildWordList() {
+  stopAllTimers();
+
+  var lang = getLang();
+  var diff = getDiff();
+  var pool = shuffle(WORDS[diff][lang]);
+
+  var batchSize = 3;
+  if (!isCountdownMode()) {
+    if (diff === 'easy') batchSize = 3;
+    else if (diff === 'medium') batchSize = 5;
+    else batchSize = 7;
+  }
+
+  gameState.defPool = pool;
+  gameState.defPoolIndex = 0;
+  gameState.batchSize = batchSize;
+
+  gameState.words = buildTokensFromPool();
+  gameState.currentIndex = 0;
+  gameState.startTime = null;
+  gameState.totalTypedKeys = 0;
+  gameState.correctTypedKeys = 0;
+  gameState.isRunning = false;
+  gameState.isPaused = false;
+  gameState.countdownMode = isCountdownMode();
+  gameState.countdownSeconds = getCountdownSeconds();
+  gameState.countdownLeft = getCountdownSeconds();
+
+  settings.lang = lang;
+
+  var countSel = document.getElementById('count-select');
+  if (countSel) countSel.style.display = 'none';
+
+  document.getElementById('live-wpm').textContent = '—';
+  document.getElementById('live-acc').textContent = '—';
+  document.getElementById('live-words').textContent = '0';
+
+  var liveTimeEl = document.getElementById('live-time');
+  if(liveTimeEl) {
+    liveTimeEl.classList.remove('countdown-urgent');
+    liveTimeEl.textContent = gameState.countdownMode ? gameState.countdownSeconds + 's' : '0s';
+  }
+
+  var inputField = document.getElementById('input-field');
+  inputField.value = '';
+  inputField.disabled = false;
+  inputField.classList.remove('input-error');
+
+  hidePauseButton();
+  renderWords();
+  showTip();
+}
+
+function buildTokensFromPool() {
+  var flat = [];
+  for (var b = 0; b < gameState.batchSize; b++) {
+    var def = gameState.defPool[gameState.defPoolIndex % gameState.defPool.length];
+    var tokens = def.split(' ');
+    for (var t = 0; t < tokens.length; t++) {
+      flat.push({ 
+        text: tokens[t], 
+        defIndex: b, 
+        correct: undefined,
+        isLastOfDef: (t === tokens.length - 1)
+      });
+    }
+    gameState.defPoolIndex++;
+  }
+  return flat;
+}
+
+function loadNextBatch() {
+  gameState.words = buildTokensFromPool();
+  gameState.currentIndex = 0;
+  var inputField = document.getElementById('input-field');
+  inputField.value = '';
+  inputField.classList.remove('input-error');
+  renderWords();
+}
