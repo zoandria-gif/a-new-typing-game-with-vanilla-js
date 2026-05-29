@@ -271,3 +271,35 @@ const TIPS = {
     "String.format() is great for formatting complex messages"
   ]
 };
+
+// ===== PARAMETRES GLOBAUX =====
+let settings = {
+  theme: 'dark',
+  lang: 'fr',
+  sound: false,
+  tips: true,
+  gameFont: 'JetBrains Mono',
+  accent: '#f78166',
+  fontSize: 'normal'
+};
+
+// ===== ETAT DU JEU =====
+let gameState = {
+  words: [],           
+  currentIndex: 0,     
+  startTime: null,     
+  totalTypedKeys: 0,   
+  correctTypedKeys: 0, 
+  isRunning: false,
+  isPaused: false,
+  timerInterval: null,
+
+  countdownMode: false,
+  countdownSeconds: 0,
+  countdownLeft: 0,
+  countdownInterval: null,
+
+  defPool: [],        
+  defPoolIndex: 0,    
+  batchSize: 3        
+};
