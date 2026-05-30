@@ -479,3 +479,77 @@ function renderCurrentWord(typed) {
     span.appendChild(charSpan);
   }
 }
+
+// ===== CHRONOMETRES ET STATISTIQUES =====
+function updateProgress() {
+  var pct = (gameState.currentIndex / gameState.words.length) * 100;
+  var fill = document.getElementById('progress-fill');
+  if(fill) fill.style.width = pct + '%';
+}
+
+function startElapsedTimer() {
+  gameState.timerInterval = setInterval(function() {
+    if (gameState.isPaused) return;
+    
+    var elapsed = Math.round((Date.now() - gameState.startTime) / 1000);
+    var timeEl = document.getElementById('live-time');
+    if (timeEl) timeEl.textContent = elapsed + 's';
+
+    updateLiveStats();
+  }, 200);
+}
+
+function startCountdownTimer() {
+  gameState.countdownLeft = gameState.countdownSeconds;
+  var timeEl = document.getElementById('live-time');
+  if(timeEl) timeEl.textContent = gameState.countdownLeft + 's';
+
+  gameState.countdownInterval = setInterval(function() {
+    if (gameState.isPaused) return;
+
+    gameState.countdownLeft--;
+    if(timeEl) {
+      timeEl.textContent = gameState.countdownLeft + 's';
+      if (gameState.countdownLeft <= 10) {
+        timeEl.classList.add('countdown-urgent');
+      } else {
+        timeEl.classList.remove('countdown-urgent');
+      }
+    }
+    updateLiveStats();
+
+    if (gameState.countdownLeft <= 0) {
+      finishGame();
+    }
+  }, 1000);
+}
+
+function stopAllTimers() {
+  clearInterval(gameState.timerInterval);
+  clearInterval(gameState.countdownInterval);
+  gameState.timerInterval = null;
+  gameState.countdownInterval = null;
+}
+
+function updateLiveStats() {
+  if (!gameState.startTime) return;
+
+  var elapsed;
+  if (gameState.countdownMode) {
+    elapsed = gameState.countdownSeconds - gameState.countdownLeft;
+  } else {
+    elapsed = (Date.now() - gameState.startTime) / 1000;
+  }
+
+  if (elapsed < 0.1) return;
+
+  var wpm = Math.round((gameState.correctTypedKeys / 5) / (elapsed / 60));
+  document.getElementById('live-wpm').textContent = wpm;
+
+  if (gameState.totalTypedKeys > 0) {
+    var acc = Math.round((gameState.correctTypedKeys / gameState.totalTypedKeys) * 100);
+    document.getElementById('live-acc').textContent = acc + '%';
+  }
+
+  document.getElementById('live-words').textContent = gameState.currentIndex;
+}
