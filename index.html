@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
@@ -264,6 +265,14 @@
             <option value="30" selected>30 mots</option>
             <option value="50">50 mots</option>
           </select>
+          <select class="select-styled" id="timer-select" onchange="rebuildWordList()">
+            <option value="words">Mots</option>
+            <option value="30">30 sec</option>
+            <option value="60">1 min</option>
+            <option value="90">1m30</option>
+            <option value="120">2 min</option>
+          </select>
+          <button class="btn-pause" id="pause-btn" onclick="togglePause()" style="display:none;"><i class="fa-solid fa-pause"></i> Pause</button>
           <button class="btn-primary" onclick="restartGame()" style="padding:8px 18px;font-size:13px;">↺ Restart</button>
         </div>
       </div>
@@ -304,6 +313,35 @@
       <div class="game-tip" id="game-tip">☕ Astuce : <span id="tip-text">En Java, toString() est appelée automatiquement quand vous afficher un objet avec System.out.println()</span></div>
 
     </div>
+  </div>
+
+  <div id="results-overlay">
+      <div class="results-card">
+          <div class="results-title">// résultats de la session</div>
+          <div class="results-wpm" id="res-wpm">0</div>
+          <div class="results-wpm-label">mots par minute</div>
+          
+          <div class="results-grid">
+              <div class="rg-item">
+                  <div class="rg-val" id="res-acc">0%</div>
+                  <div class="rg-label">Précision</div>
+              </div>
+              <div class="rg-item">
+                  <div class="rg-val" id="res-words">0</div>
+                  <div class="rg-label">Mots tapés</div>
+              </div>
+              <div class="rg-item">
+                  <div class="rg-val" id="res-time">0s</div>
+                  <div class="rg-label">Durée</div>
+              </div>
+          </div>
+          
+          <div class="results-msg" id="res-msg">Bravo !</div>
+          <div class="results-actions">
+              <button class="btn-primary" onclick="restartGame()"><i class="fa-solid fa-rotate-left"></i> Recommencer</button>
+              <button class="btn-secondary" onclick="document.getElementById('results-overlay').classList.remove('show')">Fermer</button>
+          </div>
+      </div>
   </div>
   <!-- end page-game -->
 <!-- Results overlay -->
