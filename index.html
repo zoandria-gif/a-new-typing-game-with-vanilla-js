@@ -306,6 +306,90 @@
     </div>
   </div>
   <!-- end page-game -->
+<!-- Results overlay -->
+  <div id="results-overlay">
+    <div class="results-card">
+      <div class="results-title">// résultats de la session</div>
+      <div class="results-wpm" id="res-wpm">0</div>
+      <div class="results-wpm-label">mots par minute</div>
+      <div class="results-grid">
+        <div class="rg-item">
+          <div class="rg-val" id="res-acc">0%</div>
+          <div class="rg-label">Précision</div>
+        </div>
+        <div class="rg-item">
+          <div class="rg-val" id="res-words">0</div>
+          <div class="rg-label">Mots tapés</div>
+        </div>
+        <div class="rg-item">
+          <div class="rg-val" id="res-time">0s</div>
+          <div class="rg-label">Durée</div>
+        </div>
+      </div>
+      <div class="results-msg" id="res-msg">Bravo !</div>
+      <div class="results-actions">
+        <button class="btn-primary" onclick="restartGame()">↺ Recommencer</button>
+        <button class="btn-secondary" onclick="document.getElementById('results-overlay').classList.remove('show')">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT PAGE ===== -->
+  <div id="page-about" class="page">
+    <div style="padding: 48px;">
+
+      <div class="about-hero">
+        <h1>Deux étudiants.<br>Une île. Un jeu.</h1>
+        <p>JavaType est né à Antananarivo, Madagascar, dans les salles de cours de HEI Madagascar. Nous sommes Zo et JIM, deux étudiants en première année d'informatique qui ont voulu créer un outil fun pour apprendre Java en tapant des vraies méthodes.</p>
+      </div>
+
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar av-zo">ZO</div>
+          <div class="team-info">
+            <h3>Zo Andrianarisoa</h3>
+            <div class="role">// Co-créateur · Frontend</div>
+            <p>Étudiant L1 Informatique à HEI Madagascar. Passionné par le développement web et les jeux interactifs.</p>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar av-jim">JIM</div>
+          <div class="team-info">
+            <h3>JIM Ramananarivo</h3>
+            <div class="role">// Co-créateur · Logic & Game</div>
+            <p>Étudiant L1 Informatique à HEI Madagascar. Passionné par les algorithmes et la logique de jeu.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-card">
+          <h2>🏫 HEI Madagascar</h2>
+          <p>Haute École d'Informatique (HEI) est une école d'ingénieurs en informatique basée à Antananarivo, capitale de Madagascar. Notre promotion L1 2025 est pleine de talents curieux et motivés.</p>
+        </div>
+        <div class="about-card">
+          <h2>💡 L'idée</h2>
+          <p>En cours de Java, on devait mémoriser des dizaines de méthodes. On s'est dit : et si on en faisait un jeu de dactylo ? Apprendre en tapant — mémorisation par la pratique répétée.</p>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 32px;">
+        <h2 class="section-title" style="margin-bottom: 8px;">Ce qui rend JavaType unique</h2>
+        <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">Un jeu de dactylo avec une valeur éducative réelle</p>
+        <ul class="unique-list">
+          <li>Vous tapez de vraies méthodes Java, pas des mots aléatoires — apprentissage et dactylo en même temps</li>
+          <li>Les méthodes sont classées par difficulté : courtes (facile), avec paramètres (moyen), signatures complètes (difficile)</li>
+          <li>Retour immédiat sur WPM et précision pour progresser rapidement</li>
+          <li>Des astuces Java s'affichent pendant le jeu pour apprendre pendant la pause</li>
+          <li>Support français et anglais pour s'adapter à tous les étudiants</li>
+          <li>Léger, sans installation, fonctionne dans n'importe quel navigateur</li>
+          <li>Fait par des étudiants pour des étudiants — interface simple et efficace</li>
+          <li>100% gratuit, open-source, et fait avec amour depuis Madagascar 🇲🇬</li>
+        </ul>
+      </div>
+
+    </div>
+  </div><!-- end page-about -->
 
 
 
