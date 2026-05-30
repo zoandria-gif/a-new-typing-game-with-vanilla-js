@@ -816,3 +816,51 @@ function setLang(l) {
   rebuildWordList();
   showTip();
 }
+
+// ===== EFFET SONORE AUDIO =====
+var audioCtx = null;
+function playClick() {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var o = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value = 800;
+    g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+    o.start(); o.stop(audioCtx.currentTime + 0.05);
+  } catch(e) {}
+}
+
+function toggleSound() {
+  settings.sound = !settings.sound;
+  var tog = document.getElementById('sound-toggle');
+  if(tog) tog.classList.toggle('on', settings.sound);
+  var lbl = document.getElementById('sound-label');
+  if(lbl) lbl.textContent = settings.sound ? 'active' : 'desactive';
+}
+
+function toggleTips() {
+  settings.tips = !settings.tips;
+  var tog = document.getElementById('tips-toggle');
+  if(tog) tog.classList.toggle('on', settings.tips);
+  var lbl = document.getElementById('tips-label');
+  if(lbl) lbl.textContent = settings.tips ? 'active' : 'desactive';
+  var gtip = document.getElementById('game-tip');
+  if(gtip) gtip.style.display = settings.tips ? 'block' : 'none';
+}
+
+function showTip() {
+  var tips = TIPS[settings.lang] || TIPS.fr;
+  var tip = tips[Math.floor(Math.random() * tips.length)];
+  var tipEl = document.getElementById('tip-text');
+  if (tipEl) tipEl.textContent = tip;
+}
+
+function setGameFont(font) {
+  settings.gameFont = font;
+  var preview = document.getElementById('font-preview');
+  if (preview) preview.style.fontFamily = font;
+  var wd = document.getElementById('word-display');
+  if (wd) wd.style.fontFamily = font;
+}
