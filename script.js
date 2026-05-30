@@ -642,3 +642,82 @@ function startGame(mode) {
   document.getElementById('mode-select').value = mode;
   setTimeout(rebuildWordList, 50);
 }
+
+// ===== CAPTURE DES TOUCHES ET PASSAGE OBLIGATOIRE PAR ESPACE =====
+document.getElementById('input-field').addEventListener('keydown', function(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    restartGame();
+    return;
+  }
+
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    if (gameState.isRunning) togglePause();
+    return;
+  }
+
+  if (!gameState.isRunning && gameState.words.length > 0 && !gameState.isPaused) {
+    gameState.isRunning = true;
+    gameState.startTime = Date.now();
+    if (gameState.countdownMode) {
+      startCountdownTimer();
+    } else {
+      startElapsedTimer();
+    }
+    showPauseButton();
+  }
+
+  if (gameState.isPaused) {
+    e.preventDefault();
+    return;
+  }
+
+  var wordData = gameState.words[gameState.currentIndex];
+  var expectedText = wordData.text + (wordData.isLastOfDef ? ' ' : ' ');
+  var typedValue = this.value;
+
+  if (e.key === ' ') {
+    e.preventDefault();
+
+    if (typedValue.length === 0) return;
+
+    typedValue += ' ';
+
+    gameState.totalTypedKeys += Math.max(typedValue.length, expectedText.length);
+    for (var i = 0; i < Math.min(typedValue.length, expectedText.length); i++) {
+      if (typedValue[i] === expectedText[i]) {
+        gameState.correctTypedKeys++;
+      }
+    }
+
+    wordData.correct = (typedValue === expectedText);
+    if (settings.sound) playClick();
+
+    this.value = '';
+    this.classList.remove('input-error');
+    gameState.currentIndex++;
+
+    if (gameState.currentIndex >= gameState.words.length) {
+      if (gameState.countdownMode) { loadNextBatch(); } else { finishGame(); }
+      return;
+    }
+
+    updateLiveStats();
+    renderWords();
+  }
+});
+
+document.getElementById('input-field').addEventListener('input', function() {
+  if (gameState.isPaused) return;
+  
+  var typed = this.value;
+  var wordData = gameState.words[gameState.currentIndex];
+  if (!wordData) return;
+
+  var expected = wordData.text + (wordData.isLastOfDef ? ' ' : ' ');
+  var isError = typed.length > 0 && !expected.startsWith(typed);
+  
+  this.classList.toggle('input-error', isError);
+  renderCurrentWord(typed);
+});
