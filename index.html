@@ -429,6 +429,128 @@
     </div>
   </div><!-- end page-about -->
 
+  <!-- ===== SETTINGS PAGE ===== -->
+  <div id="page-settings" class="page">
+    <div style="padding: 48px;">
+      <h1 class="settings-title">⚙️ Paramètres</h1>
+
+      <!-- Apparence -->
+      <div class="settings-section">
+        <div class="settings-section-header">🎨 Apparence</div>
+
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <h4>Thème</h4>
+            <p>Mode clair ou sombre</p>
+          </div>
+          <div class="settings-control">
+            <div class="pill-select">
+              <button class="pill-opt" id="theme-light-btn" onclick="setTheme('light')">☀️ Clair</button>
+              <button class="pill-opt active" id="theme-dark-btn" onclick="setTheme('dark')">🌙 Sombre</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <h4>Couleur d'accent</h4>
+            <p>Couleur principale de l'interface</p>
+          </div>
+          <div class="settings-control">
+            <div class="color-swatches">
+              <div class="color-swatch active" style="background:#f78166" onclick="setAccent('#f78166', this)" title="Corail (défaut)"></div>
+              <div class="color-swatch" style="background:#79c0ff" onclick="setAccent('#79c0ff', this)" title="Bleu"></div>
+              <div class="color-swatch" style="background:#56d364" onclick="setAccent('#56d364', this)" title="Vert"></div>
+              <div class="color-swatch" style="background:#d2a8ff" onclick="setAccent('#d2a8ff', this)" title="Violet"></div>
+              <div class="color-swatch" style="background:#f0c674" onclick="setAccent('#f0c674', this)" title="Jaune"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <h4>Taille du texte</h4>
+            <p>Taille de la police de l'interface</p>
+          </div>
+          <div class="settings-control">
+            <div class="pill-select">
+              <button class="pill-opt" onclick="setFontSize('small')">Petit</button>
+              <button class="pill-opt active" onclick="setFontSize('normal')">Normal</button>
+              <button class="pill-opt" onclick="setFontSize('large')">Grand</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Jeu -->
+      <div class="settings-section">
+        <div class="settings-section-header">⌨️ Jeu</div>
+
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <h4>Langue des mots</h4>
+            <p>Méthodes Java en français ou en anglais (noms et commentaires)</p>
+          </div>
+          <div class="settings-control">
+            <div class="pill-select">
+              <button class="pill-opt active" id="lang-fr" onclick="setLang('fr')">🇫🇷 Français</button>
+              <button class="pill-opt" id="lang-en" onclick="setLang('en')">🇬🇧 English</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <h4>Sons</h4>
+            <p>Activer les sons de frappe et les effets sonores</p>
+          </div>
+          <div class="settings-control">
+            <div class="toggle-switch" id="sound-toggle" onclick="toggleSound()"></div>
+            <span id="sound-label" style="font-size:12px;color:var(--muted);font-family:var(--font-mono);">désactivé</span>
+          </div>
+        </div>
+
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <h4>Afficher les astuces Java</h4>
+            <p>Afficher des conseils Java pendant le jeu</p>
+          </div>
+          <div class="settings-control">
+            <div class="toggle-switch on" id="tips-toggle" onclick="toggleTips()"></div>
+            <span id="tips-label" style="font-size:12px;color:var(--muted);font-family:var(--font-mono);">activé</span>
+          </div>
+        </div>
+
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <h4>Police du jeu</h4>
+            <p>Police utilisée pour les mots à taper</p>
+          </div>
+          <div class="settings-control">
+            <div class="pill-select">
+              <button class="pill-opt active" onclick="setGameFont('JetBrains Mono')">JetBrains</button>
+              <button class="pill-opt" onclick="setGameFont('Courier New')">Courier</button>
+              <button class="pill-opt" onclick="setGameFont('monospace')">Mono</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Preview -->
+      <div class="settings-section">
+        <div class="settings-section-header">👁️ Aperçu</div>
+        <div style="padding: 20px;">
+          <div class="font-preview" id="font-preview">
+            toString() hashCode() equals() getClass() length()
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- end page-settings -->
+
 
 
     <script src="script.js"></script>
