@@ -407,3 +407,75 @@ function loadNextBatch() {
   inputField.classList.remove('input-error');
   renderWords();
 }
+
+
+// ===== AFFICHAGE ET RENDU DYNAMIQUE DES MOTS =====
+function renderWords() {
+  var display = document.getElementById('word-display');
+  if (!display) return;
+  display.style.fontFamily = settings.gameFont;
+  display.innerHTML = '';
+
+  var lastDefIndex = -1;
+
+  for (var i = 0; i < gameState.words.length; i++) {
+    var word = gameState.words[i];
+
+    if (word.defIndex !== lastDefIndex) {
+      if (lastDefIndex !== -1) {
+        var sep = document.createElement('div');
+        sep.className = 'def-separator';
+        display.appendChild(sep);
+      }
+      lastDefIndex = word.defIndex;
+    }
+
+    var span = document.createElement('span');
+    span.id = 'w-' + i;
+    span.style.whiteSpace = 'pre-wrap'; 
+
+    if (i < gameState.currentIndex) {
+      span.className = word.correct ? 'word-done' : 'word-wrong';
+    } else if (i === gameState.currentIndex) {
+      span.className = 'word-current';
+    } else {
+      span.className = 'word-pending';
+    }
+
+    var baseText = word.text + (word.isLastOfDef ? '' : ' ');
+    span.textContent = baseText;
+
+    display.appendChild(span);
+  }
+
+  var cur = document.getElementById('w-' + gameState.currentIndex);
+  if (cur) cur.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+
+  updateProgress();
+}
+
+function renderCurrentWord(typed) {
+  var span = document.getElementById('w-' + gameState.currentIndex);
+  if (!span) return;
+  
+  var wordData = gameState.words[gameState.currentIndex];
+  var target = wordData.text + (wordData.isLastOfDef ? '' : ' ');
+  
+  span.innerHTML = '';
+
+  for (var i = 0; i < target.length; i++) {
+    var charSpan = document.createElement('span');
+    charSpan.textContent = target[i];
+    
+    if (target[i] === ' ') {
+      charSpan.style.whiteSpace = 'pre';
+    }
+
+    if (i < typed.length) {
+      var ok = typed[i] === target[i];
+      charSpan.className = ok ? 'char-ok' : 'char-err';
+    }
+    
+    span.appendChild(charSpan);
+  }
+}
