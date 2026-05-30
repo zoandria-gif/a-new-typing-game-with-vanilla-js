@@ -553,3 +553,92 @@ function updateLiveStats() {
 
   document.getElementById('live-words').textContent = gameState.currentIndex;
 }
+
+// ===== INTERFACES ET FENETRES PAUSE / FIN =====
+function togglePause() {
+  if (!gameState.isRunning) return;
+
+  gameState.isPaused = !gameState.isPaused;
+  var btn = document.getElementById('pause-btn');
+  var inputField = document.getElementById('input-field');
+
+  if (gameState.isPaused) {
+    if(btn) { btn.innerHTML = '<i class="fa-solid fa-play"></i> Reprendre'; btn.classList.add('paused'); }
+    inputField.disabled = true;
+    inputField.placeholder = '— JEU EN PAUSE —';
+    document.getElementById('word-display').classList.add('game-paused');
+  } else {
+    if(btn) { btn.innerHTML = '<i class="fa-solid fa-pause"></i> Pause'; btn.classList.remove('paused'); }
+    inputField.disabled = false;
+    inputField.placeholder = 'Continuez a taper…';
+    inputField.focus();
+    document.getElementById('word-display').classList.remove('game-paused');
+  }
+}
+
+function hidePauseButton() {
+  var btn = document.getElementById('pause-btn');
+  if (btn) {
+    btn.style.display = 'none';
+    btn.innerHTML = '<i class="fa-solid fa-pause"></i> Pause';
+    btn.classList.remove('paused');
+  }
+  document.getElementById('word-display').classList.remove('game-paused');
+}
+
+function showPauseButton() {
+  var btn = document.getElementById('pause-btn');
+  if (btn) btn.style.display = 'inline-flex';
+}
+
+function finishGame() {
+  stopAllTimers();
+  gameState.isRunning = false;
+  gameState.isPaused = false;
+  hidePauseButton();
+
+  document.getElementById('input-field').disabled = true;
+
+  var elapsed;
+  if (gameState.countdownMode) {
+    elapsed = gameState.countdownSeconds;
+  } else {
+    elapsed = (Date.now() - gameState.startTime) / 1000;
+  }
+
+  var wpm = elapsed > 0 ? Math.round((gameState.correctTypedKeys / 5) / (elapsed / 60)) : 0;
+  var acc = gameState.totalTypedKeys > 0 ? Math.round((gameState.correctTypedKeys / gameState.totalTypedKeys) * 100) : 100;
+
+  document.getElementById('res-wpm').textContent = wpm;
+  document.getElementById('res-acc').textContent = acc + '%';
+  document.getElementById('res-words').textContent = gameState.currentIndex;
+  document.getElementById('res-time').textContent = Math.round(elapsed) + 's';
+
+  var msg;
+  if (wpm >= 80)      msg = '🔥 Incroyable ! Vous etes un vrai pro Java !';
+  else if (wpm >= 60) msg = '<i class="fa-solid fa-bolt"></i> Excellent ! Votre vitesse est impressionnante !';
+  else if (wpm >= 40) msg = '👍 Bien joue ! Continuez a pratiquer !';
+  else if (wpm >= 20) msg = '📚 Bon debut ! La pratique reguliere vous aidera.';
+  else                msg = '🌱 Continuez, chaque frappe vous ameliore !';
+
+  document.getElementById('res-msg').innerHTML = msg;
+
+  document.getElementById('live-wpm').textContent = wpm;
+  document.getElementById('live-acc').textContent = acc + '%';
+  document.getElementById('live-words').textContent = gameState.currentIndex;
+
+  renderWords();
+  document.getElementById('results-overlay').classList.add('show');
+}
+
+function restartGame() {
+  document.getElementById('results-overlay').classList.remove('show');
+  rebuildWordList();
+  document.getElementById('input-field').focus();
+}
+
+function startGame(mode) {
+  navigate('game');
+  document.getElementById('mode-select').value = mode;
+  setTimeout(rebuildWordList, 50);
+}
