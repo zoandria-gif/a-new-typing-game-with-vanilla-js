@@ -804,6 +804,11 @@ function setFontSize(size) {
   document.body.classList.remove('fs-small', 'fs-large');
   if (size === 'small') document.body.classList.add('fs-small');
   if (size === 'large') document.body.classList.add('fs-large');
+
+  document.getElementById('fs-small-btn').classList.remove('active');
+  document.getElementById('fs-normal-btn').classList.remove('active');
+  document.getElementById('fs-large-btn').classList.remove('active');
+  document.getElementById('fs-' + size + '-btn').classList.add('active');
 }
  
 function setLang(l) {
@@ -864,4 +869,11 @@ function setGameFont(font) {
   if (preview) preview.style.fontFamily = font;
   let wd = document.getElementById('word-display');
   if (wd) wd.style.fontFamily = font;
+
+  document.getElementById('font-jb-btn').classList.remove('active');
+  document.getElementById('font-courier-btn').classList.remove('active');
+  document.getElementById('font-mono-btn').classList.remove('active');
+  if (font === 'JetBrains Mono') document.getElementById('font-jb-btn').classList.add('active');
+  else if (font === 'Courier New') document.getElementById('font-courier-btn').classList.add('active');
+  else if (font === 'monospace')   document.getElementById('font-mono-btn').classList.add('active');
 }

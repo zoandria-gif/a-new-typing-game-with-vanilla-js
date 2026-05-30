@@ -868,7 +868,14 @@ body {
 
 /* ===== FONT SIZE ===== */
 body.fs-small { font-size: 13px; }
-body.fs-large { font-size: 16px; }
+body.fs-large { font-size: 17px; }
+
+body.fs-small #word-display { font-size: 1.1rem; }
+body.fs-large  #word-display { font-size: 1.45rem; }
+
+body.fs-small #input-field { font-size: 1rem; }
+body.fs-large  #input-field { font-size: 1.25rem; }
+
 /* ===== MOT INCORRECT (rouge) ===== */
 #word-display .word-wrong { color: #f85149; text-decoration: underline wavy #f85149; }
 
