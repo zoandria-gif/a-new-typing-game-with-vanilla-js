@@ -110,14 +110,14 @@ function navigate(page) {
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
   document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
   document.getElementById('page-' + page).classList.add('active');
-  var navEl = document.querySelector('[data-page="' + page + '"]');
+  let navEl = document.querySelector('[data-page="' + page + '"]');
   if (navEl) navEl.classList.add('active');
   window.scrollTo(0, 0);
   if (page === 'game') {
     setTimeout(function() { document.getElementById('input-field').focus(); }, 100);
   }
 }
-
+ 
 document.querySelectorAll('.nav-item[data-page]').forEach(function(btn) {
   btn.addEventListener('click', function() { navigate(btn.dataset.page); });
 });
@@ -306,45 +306,45 @@ let gameState = {
 
 // ===== LOGIQUE FLUX DE TEXTE =====
 function shuffle(arr) {
-  var a = arr.slice();
-  for (var i = a.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  let a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    let tmp = a[i]; a[i] = a[j]; a[j] = tmp;
   }
   return a;
 }
-
+ 
 function getLang()  { return document.getElementById('lang-select').value; }
 function getDiff()  { return document.getElementById('mode-select').value; }
 function isCountdownMode() { return document.getElementById('timer-select').value !== 'words'; }
-
+ 
 function getCountdownSeconds() {
-  var val = document.getElementById('timer-select').value;
+  let val = document.getElementById('timer-select').value;
   if (val === '30')  return 30;
   if (val === '60')  return 60;
   if (val === '90')  return 90;
   if (val === '120') return 120;
   return 0;
 }
-
+ 
 function rebuildWordList() {
   stopAllTimers();
-
-  var lang = getLang();
-  var diff = getDiff();
-  var pool = shuffle(WORDS[diff][lang]);
-
-  var batchSize = 3;
+ 
+  let lang = getLang();
+  let diff = getDiff();
+  let pool = shuffle(WORDS[diff][lang]);
+ 
+  let batchSize = 3;
   if (!isCountdownMode()) {
     if (diff === 'easy') batchSize = 3;
     else if (diff === 'medium') batchSize = 5;
     else batchSize = 7;
   }
-
+ 
   gameState.defPool = pool;
   gameState.defPoolIndex = 0;
   gameState.batchSize = batchSize;
-
+ 
   gameState.words = buildTokensFromPool();
   gameState.currentIndex = 0;
   gameState.startTime = null;
@@ -355,41 +355,41 @@ function rebuildWordList() {
   gameState.countdownMode = isCountdownMode();
   gameState.countdownSeconds = getCountdownSeconds();
   gameState.countdownLeft = getCountdownSeconds();
-
+ 
   settings.lang = lang;
-
-  var countSel = document.getElementById('count-select');
+ 
+  let countSel = document.getElementById('count-select');
   if (countSel) countSel.style.display = 'none';
-
+ 
   document.getElementById('live-wpm').textContent = '—';
   document.getElementById('live-acc').textContent = '—';
   document.getElementById('live-words').textContent = '0';
-
-  var liveTimeEl = document.getElementById('live-time');
+ 
+  let liveTimeEl = document.getElementById('live-time');
   if(liveTimeEl) {
     liveTimeEl.classList.remove('countdown-urgent');
     liveTimeEl.textContent = gameState.countdownMode ? gameState.countdownSeconds + 's' : '0s';
   }
-
-  var inputField = document.getElementById('input-field');
+ 
+  let inputField = document.getElementById('input-field');
   inputField.value = '';
   inputField.disabled = false;
   inputField.classList.remove('input-error');
-
+ 
   hidePauseButton();
   renderWords();
   showTip();
 }
-
+ 
 function buildTokensFromPool() {
-  var flat = [];
-  for (var b = 0; b < gameState.batchSize; b++) {
-    var def = gameState.defPool[gameState.defPoolIndex % gameState.defPool.length];
-    var tokens = def.split(' ');
-    for (var t = 0; t < tokens.length; t++) {
-      flat.push({ 
-        text: tokens[t], 
-        defIndex: b, 
+  let flat = [];
+  for (let b = 0; b < gameState.batchSize; b++) {
+    let def = gameState.defPool[gameState.defPoolIndex % gameState.defPool.length];
+    let tokens = def.split(' ');
+    for (let t = 0; t < tokens.length; t++) {
+      flat.push({
+        text: tokens[t],
+        defIndex: b,
         correct: undefined,
         isLastOfDef: (t === tokens.length - 1)
       });
@@ -398,11 +398,11 @@ function buildTokensFromPool() {
   }
   return flat;
 }
-
+ 
 function loadNextBatch() {
   gameState.words = buildTokensFromPool();
   gameState.currentIndex = 0;
-  var inputField = document.getElementById('input-field');
+  let inputField = document.getElementById('input-field');
   inputField.value = '';
   inputField.classList.remove('input-error');
   renderWords();
@@ -411,29 +411,29 @@ function loadNextBatch() {
 
 // ===== AFFICHAGE ET RENDU DYNAMIQUE DES MOTS =====
 function renderWords() {
-  var display = document.getElementById('word-display');
+  let display = document.getElementById('word-display');
   if (!display) return;
   display.style.fontFamily = settings.gameFont;
   display.innerHTML = '';
-
-  var lastDefIndex = -1;
-
-  for (var i = 0; i < gameState.words.length; i++) {
-    var word = gameState.words[i];
-
+ 
+  let lastDefIndex = -1;
+ 
+  for (let i = 0; i < gameState.words.length; i++) {
+    let word = gameState.words[i];
+ 
     if (word.defIndex !== lastDefIndex) {
       if (lastDefIndex !== -1) {
-        var sep = document.createElement('div');
+        let sep = document.createElement('div');
         sep.className = 'def-separator';
         display.appendChild(sep);
       }
       lastDefIndex = word.defIndex;
     }
-
-    var span = document.createElement('span');
+ 
+    let span = document.createElement('span');
     span.id = 'w-' + i;
-    span.style.whiteSpace = 'pre-wrap'; 
-
+    span.style.whiteSpace = 'pre-wrap';
+ 
     if (i < gameState.currentIndex) {
       span.className = word.correct ? 'word-done' : 'word-wrong';
     } else if (i === gameState.currentIndex) {
@@ -441,72 +441,72 @@ function renderWords() {
     } else {
       span.className = 'word-pending';
     }
-
-    var baseText = word.text + (word.isLastOfDef ? '' : ' ');
+ 
+    let baseText = word.text + (word.isLastOfDef ? '' : ' ');
     span.textContent = baseText;
-
+ 
     display.appendChild(span);
   }
-
-  var cur = document.getElementById('w-' + gameState.currentIndex);
+ 
+  let cur = document.getElementById('w-' + gameState.currentIndex);
   if (cur) cur.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-
+ 
   updateProgress();
 }
-
+ 
 function renderCurrentWord(typed) {
-  var span = document.getElementById('w-' + gameState.currentIndex);
+  let span = document.getElementById('w-' + gameState.currentIndex);
   if (!span) return;
-  
-  var wordData = gameState.words[gameState.currentIndex];
-  var target = wordData.text + (wordData.isLastOfDef ? '' : ' ');
-  
+ 
+  let wordData = gameState.words[gameState.currentIndex];
+  let target = wordData.text + (wordData.isLastOfDef ? '' : ' ');
+ 
   span.innerHTML = '';
-
-  for (var i = 0; i < target.length; i++) {
-    var charSpan = document.createElement('span');
+ 
+  for (let i = 0; i < target.length; i++) {
+    let charSpan = document.createElement('span');
     charSpan.textContent = target[i];
-    
+ 
     if (target[i] === ' ') {
       charSpan.style.whiteSpace = 'pre';
     }
-
+ 
     if (i < typed.length) {
-      var ok = typed[i] === target[i];
+      let ok = typed[i] === target[i];
       charSpan.className = ok ? 'char-ok' : 'char-err';
     }
-    
+ 
     span.appendChild(charSpan);
   }
 }
-
+ 
 // ===== CHRONOMETRES ET STATISTIQUES =====
 function updateProgress() {
-  var pct = (gameState.currentIndex / gameState.words.length) * 100;
-  var fill = document.getElementById('progress-fill');
+  let pct = (gameState.currentIndex / gameState.words.length) * 100;
+  let fill = document.getElementById('progress-fill');
   if(fill) fill.style.width = pct + '%';
 }
-
+ 
 function startElapsedTimer() {
   gameState.timerInterval = setInterval(function() {
     if (gameState.isPaused) return;
-    
-    var elapsed = Math.round((Date.now() - gameState.startTime) / 1000);
-    var timeEl = document.getElementById('live-time');
+ 
+    let elapsed = Math.round((Date.now() - gameState.startTime) / 1000);
+    let timeEl = document.getElementById('live-time');
     if (timeEl) timeEl.textContent = elapsed + 's';
-
+ 
     updateLiveStats();
   }, 200);
 }
-
+ 
 function startCountdownTimer() {
   gameState.countdownLeft = gameState.countdownSeconds;
-  var timeEl = document.getElementById('live-time');
+  let timeEl = document.getElementById('live-time');
   if(timeEl) timeEl.textContent = gameState.countdownLeft + 's';
-
+ 
   gameState.countdownInterval = setInterval(function() {
     if (gameState.isPaused) return;
-
+ 
     gameState.countdownLeft--;
     if(timeEl) {
       timeEl.textContent = gameState.countdownLeft + 's';
@@ -517,51 +517,51 @@ function startCountdownTimer() {
       }
     }
     updateLiveStats();
-
+ 
     if (gameState.countdownLeft <= 0) {
       finishGame();
     }
   }, 1000);
 }
-
+ 
 function stopAllTimers() {
   clearInterval(gameState.timerInterval);
   clearInterval(gameState.countdownInterval);
   gameState.timerInterval = null;
   gameState.countdownInterval = null;
 }
-
+ 
 function updateLiveStats() {
   if (!gameState.startTime) return;
-
-  var elapsed;
+ 
+  let elapsed;
   if (gameState.countdownMode) {
     elapsed = gameState.countdownSeconds - gameState.countdownLeft;
   } else {
     elapsed = (Date.now() - gameState.startTime) / 1000;
   }
-
+ 
   if (elapsed < 0.1) return;
-
-  var wpm = Math.round((gameState.correctTypedKeys / 5) / (elapsed / 60));
+ 
+  let wpm = Math.round((gameState.correctTypedKeys / 5) / (elapsed / 60));
   document.getElementById('live-wpm').textContent = wpm;
-
+ 
   if (gameState.totalTypedKeys > 0) {
-    var acc = Math.round((gameState.correctTypedKeys / gameState.totalTypedKeys) * 100);
+    let acc = Math.round((gameState.correctTypedKeys / gameState.totalTypedKeys) * 100);
     document.getElementById('live-acc').textContent = acc + '%';
   }
-
+ 
   document.getElementById('live-words').textContent = gameState.currentIndex;
 }
-
+ 
 // ===== INTERFACES ET FENETRES PAUSE / FIN =====
 function togglePause() {
   if (!gameState.isRunning) return;
-
+ 
   gameState.isPaused = !gameState.isPaused;
-  var btn = document.getElementById('pause-btn');
-  var inputField = document.getElementById('input-field');
-
+  let btn = document.getElementById('pause-btn');
+  let inputField = document.getElementById('input-field');
+ 
   if (gameState.isPaused) {
     if(btn) { btn.innerHTML = '<i class="fa-solid fa-play"></i> Reprendre'; btn.classList.add('paused'); }
     inputField.disabled = true;
@@ -575,9 +575,9 @@ function togglePause() {
     document.getElementById('word-display').classList.remove('game-paused');
   }
 }
-
+ 
 function hidePauseButton() {
-  var btn = document.getElementById('pause-btn');
+  let btn = document.getElementById('pause-btn');
   if (btn) {
     btn.style.display = 'none';
     btn.innerHTML = '<i class="fa-solid fa-pause"></i> Pause';
@@ -585,64 +585,64 @@ function hidePauseButton() {
   }
   document.getElementById('word-display').classList.remove('game-paused');
 }
-
+ 
 function showPauseButton() {
-  var btn = document.getElementById('pause-btn');
+  let btn = document.getElementById('pause-btn');
   if (btn) btn.style.display = 'inline-flex';
 }
-
+ 
 function finishGame() {
   stopAllTimers();
   gameState.isRunning = false;
   gameState.isPaused = false;
   hidePauseButton();
-
+ 
   document.getElementById('input-field').disabled = true;
-
-  var elapsed;
+ 
+  let elapsed;
   if (gameState.countdownMode) {
     elapsed = gameState.countdownSeconds;
   } else {
     elapsed = (Date.now() - gameState.startTime) / 1000;
   }
-
-  var wpm = elapsed > 0 ? Math.round((gameState.correctTypedKeys / 5) / (elapsed / 60)) : 0;
-  var acc = gameState.totalTypedKeys > 0 ? Math.round((gameState.correctTypedKeys / gameState.totalTypedKeys) * 100) : 100;
-
+ 
+  let wpm = elapsed > 0 ? Math.round((gameState.correctTypedKeys / 5) / (elapsed / 60)) : 0;
+  let acc = gameState.totalTypedKeys > 0 ? Math.round((gameState.correctTypedKeys / gameState.totalTypedKeys) * 100) : 100;
+ 
   document.getElementById('res-wpm').textContent = wpm;
   document.getElementById('res-acc').textContent = acc + '%';
   document.getElementById('res-words').textContent = gameState.currentIndex;
   document.getElementById('res-time').textContent = Math.round(elapsed) + 's';
-
-  var msg;
+ 
+  let msg;
   if (wpm >= 80)      msg = '🔥 Incroyable ! Vous etes un vrai pro Java !';
   else if (wpm >= 60) msg = '<i class="fa-solid fa-bolt"></i> Excellent ! Votre vitesse est impressionnante !';
   else if (wpm >= 40) msg = '👍 Bien joue ! Continuez a pratiquer !';
   else if (wpm >= 20) msg = '📚 Bon debut ! La pratique reguliere vous aidera.';
   else                msg = '🌱 Continuez, chaque frappe vous ameliore !';
-
+ 
   document.getElementById('res-msg').innerHTML = msg;
-
+ 
   document.getElementById('live-wpm').textContent = wpm;
   document.getElementById('live-acc').textContent = acc + '%';
   document.getElementById('live-words').textContent = gameState.currentIndex;
-
+ 
   renderWords();
   document.getElementById('results-overlay').classList.add('show');
 }
-
+ 
 function restartGame() {
   document.getElementById('results-overlay').classList.remove('show');
   rebuildWordList();
   document.getElementById('input-field').focus();
 }
-
+ 
 function startGame(mode) {
   navigate('game');
   document.getElementById('mode-select').value = mode;
   setTimeout(rebuildWordList, 50);
 }
-
+ 
 // ===== CAPTURE DES TOUCHES ET PASSAGE OBLIGATOIRE PAR ESPACE =====
 document.getElementById('input-field').addEventListener('keydown', function(e) {
   if (e.key === 'Tab') {
@@ -650,13 +650,13 @@ document.getElementById('input-field').addEventListener('keydown', function(e) {
     restartGame();
     return;
   }
-
+ 
   if (e.key === 'Escape') {
     e.preventDefault();
     if (gameState.isRunning) togglePause();
     return;
   }
-
+ 
   if (!gameState.isRunning && gameState.words.length > 0 && !gameState.isPaused) {
     gameState.isRunning = true;
     gameState.startTime = Date.now();
@@ -667,94 +667,94 @@ document.getElementById('input-field').addEventListener('keydown', function(e) {
     }
     showPauseButton();
   }
-
+ 
   if (gameState.isPaused) {
     e.preventDefault();
     return;
   }
-
-  var wordData = gameState.words[gameState.currentIndex];
-  var expectedText = wordData.text + (wordData.isLastOfDef ? ' ' : ' ');
-  var typedValue = this.value;
-
+ 
+  let wordData = gameState.words[gameState.currentIndex];
+  let expectedText = wordData.text + (wordData.isLastOfDef ? ' ' : ' ');
+  let typedValue = this.value;
+ 
   if (e.key === ' ') {
     e.preventDefault();
-
+ 
     if (typedValue.length === 0) return;
-
+ 
     typedValue += ' ';
-
+ 
     gameState.totalTypedKeys += Math.max(typedValue.length, expectedText.length);
-    for (var i = 0; i < Math.min(typedValue.length, expectedText.length); i++) {
+    for (let i = 0; i < Math.min(typedValue.length, expectedText.length); i++) {
       if (typedValue[i] === expectedText[i]) {
         gameState.correctTypedKeys++;
       }
     }
-
+ 
     wordData.correct = (typedValue === expectedText);
     if (settings.sound) playClick();
-
+ 
     this.value = '';
     this.classList.remove('input-error');
     gameState.currentIndex++;
-
+ 
     if (gameState.currentIndex >= gameState.words.length) {
       if (gameState.countdownMode) { loadNextBatch(); } else { finishGame(); }
       return;
     }
-
+ 
     updateLiveStats();
     renderWords();
   }
 });
-
+ 
 document.getElementById('input-field').addEventListener('input', function() {
   if (gameState.isPaused) return;
-  
-  var typed = this.value;
-  var wordData = gameState.words[gameState.currentIndex];
+ 
+  let typed = this.value;
+  let wordData = gameState.words[gameState.currentIndex];
   if (!wordData) return;
-
-  var expected = wordData.text + (wordData.isLastOfDef ? ' ' : ' ');
-  var isError = typed.length > 0 && !expected.startsWith(typed);
-  
+ 
+  let expected = wordData.text + (wordData.isLastOfDef ? ' ' : ' ');
+  let isError = typed.length > 0 && !expected.startsWith(typed);
+ 
   this.classList.toggle('input-error', isError);
   renderCurrentWord(typed);
 });
-
+ 
 // ===== MARQUEE ET EFFETS VISUELS DE FOND =====
 function showToast(msg, type) {
-  var t = document.getElementById('toast');
+  let t = document.getElementById('toast');
   if(!t) return;
   t.textContent = msg;
   t.className = 'toast show ' + (type || '');
   setTimeout(function() { t.classList.remove('show'); }, 3000);
 }
-
+ 
 function buildMarquee() {
-  var items = [].concat(WORDS.easy.fr, WORDS.medium.fr, WORDS.hard.fr,
+  let items = [].concat(WORDS.easy.fr, WORDS.medium.fr, WORDS.hard.fr,
                         WORDS.easy.fr, WORDS.medium.fr, WORDS.hard.fr);
-  var track = document.getElementById('marquee-track');
+  let track = document.getElementById('marquee-track');
   if (!track) return;
   track.innerHTML = '';
   items.forEach(function(w) {
-    var el = document.createElement('div');
+    let el = document.createElement('div');
     el.className = 'marquee-item';
     el.innerHTML = '<span>' + w + '</span>';
     track.appendChild(el);
   });
   items.forEach(function(w) {
-    var el = document.createElement('div');
+    let el = document.createElement('div');
     el.className = 'marquee-item';
     el.innerHTML = '<span>' + w + '</span>';
     track.appendChild(el);
   });
 }
-
+ 
 function buildBgCode() {
-  var el = document.getElementById('bg-code');
+  let el = document.getElementById('bg-code');
   if (!el) return;
-  var lines = [
+  let lines = [
     'public class JavaType {',
     '  String[] words = getWords();',
     '  int wpm = calcWPM();',
@@ -774,56 +774,57 @@ function buildBgCode() {
 buildMarquee();
 buildBgCode();
 rebuildWordList();
+showTip();
 
-// // ===== PARAMETRES INTERFACE VITESSE/STYLE =====
+// ===== PARAMETRES INTERFACE VITESSE/STYLE =====
 function setTheme(t) {
   settings.theme = t;
   document.documentElement.setAttribute('data-theme', t);
-  var tog = document.getElementById('theme-toggle');
+  let tog = document.getElementById('theme-toggle');
   if (tog) { if (t === 'dark') { tog.classList.add('on'); } else { tog.classList.remove('on'); } }
-  var btnL = document.getElementById('theme-light-btn');
-  var btnD = document.getElementById('theme-dark-btn');
+  let btnL = document.getElementById('theme-light-btn');
+  let btnD = document.getElementById('theme-dark-btn');
   if(btnL) btnL.classList.toggle('active', t === 'light');
   if(btnD) btnD.classList.toggle('active', t === 'dark');
 }
-
+ 
 function toggleTheme() {
   setTheme(settings.theme === 'dark' ? 'light' : 'dark');
 }
-
+ 
 function setAccent(color, el) {
   settings.accent = color;
   document.documentElement.style.setProperty('--accent', color);
   document.querySelectorAll('.color-swatch').forEach(function(s) { s.classList.remove('active'); });
   if (el) el.classList.add('active');
 }
-
+ 
 function setFontSize(size) {
   settings.fontSize = size;
   document.body.classList.remove('fs-small', 'fs-large');
   if (size === 'small') document.body.classList.add('fs-small');
   if (size === 'large') document.body.classList.add('fs-large');
 }
-
+ 
 function setLang(l) {
   settings.lang = l;
-  var lfr = document.getElementById('lang-fr');
-  var len = document.getElementById('lang-en');
+  let lfr = document.getElementById('lang-fr');
+  let len = document.getElementById('lang-en');
   if(lfr) lfr.classList.toggle('active', l === 'fr');
   if(len) len.classList.toggle('active', l === 'en');
-  var sel = document.getElementById('lang-select');
+  let sel = document.getElementById('lang-select');
   if (sel) sel.value = l;
   rebuildWordList();
   showTip();
 }
 
 // ===== EFFET SONORE AUDIO =====
-var audioCtx = null;
+let audioCtx = null;
 function playClick() {
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    var o = audioCtx.createOscillator();
-    var g = audioCtx.createGain();
+    let o = audioCtx.createOscillator();
+    let g = audioCtx.createGain();
     o.connect(g); g.connect(audioCtx.destination);
     o.frequency.value = 800;
     g.gain.setValueAtTime(0.1, audioCtx.currentTime);
@@ -831,36 +832,36 @@ function playClick() {
     o.start(); o.stop(audioCtx.currentTime + 0.05);
   } catch(e) {}
 }
-
+ 
 function toggleSound() {
   settings.sound = !settings.sound;
-  var tog = document.getElementById('sound-toggle');
+  let tog = document.getElementById('sound-toggle');
   if(tog) tog.classList.toggle('on', settings.sound);
-  var lbl = document.getElementById('sound-label');
+  let lbl = document.getElementById('sound-label');
   if(lbl) lbl.textContent = settings.sound ? 'active' : 'desactive';
 }
-
+ 
 function toggleTips() {
   settings.tips = !settings.tips;
-  var tog = document.getElementById('tips-toggle');
+  let tog = document.getElementById('tips-toggle');
   if(tog) tog.classList.toggle('on', settings.tips);
-  var lbl = document.getElementById('tips-label');
+  let lbl = document.getElementById('tips-label');
   if(lbl) lbl.textContent = settings.tips ? 'active' : 'desactive';
-  var gtip = document.getElementById('game-tip');
+  let gtip = document.getElementById('game-tip');
   if(gtip) gtip.style.display = settings.tips ? 'block' : 'none';
 }
-
+ 
 function showTip() {
-  var tips = TIPS[settings.lang] || TIPS.fr;
-  var tip = tips[Math.floor(Math.random() * tips.length)];
-  var tipEl = document.getElementById('tip-text');
+  let tips = TIPS[settings.lang] || TIPS.fr;
+  let tip = tips[Math.floor(Math.random() * tips.length)];
+  let tipEl = document.getElementById('tip-text');
   if (tipEl) tipEl.textContent = tip;
 }
-
+ 
 function setGameFont(font) {
   settings.gameFont = font;
-  var preview = document.getElementById('font-preview');
+  let preview = document.getElementById('font-preview');
   if (preview) preview.style.fontFamily = font;
-  var wd = document.getElementById('word-display');
+  let wd = document.getElementById('word-display');
   if (wd) wd.style.fontFamily = font;
 }
