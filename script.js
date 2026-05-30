@@ -721,3 +721,56 @@ document.getElementById('input-field').addEventListener('input', function() {
   this.classList.toggle('input-error', isError);
   renderCurrentWord(typed);
 });
+
+// ===== MARQUEE ET EFFETS VISUELS DE FOND =====
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  if(!t) return;
+  t.textContent = msg;
+  t.className = 'toast show ' + (type || '');
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
+}
+
+function buildMarquee() {
+  var items = [].concat(WORDS.easy.fr, WORDS.medium.fr, WORDS.hard.fr,
+                        WORDS.easy.fr, WORDS.medium.fr, WORDS.hard.fr);
+  var track = document.getElementById('marquee-track');
+  if (!track) return;
+  track.innerHTML = '';
+  items.forEach(function(w) {
+    var el = document.createElement('div');
+    el.className = 'marquee-item';
+    el.innerHTML = '<span>' + w + '</span>';
+    track.appendChild(el);
+  });
+  items.forEach(function(w) {
+    var el = document.createElement('div');
+    el.className = 'marquee-item';
+    el.innerHTML = '<span>' + w + '</span>';
+    track.appendChild(el);
+  });
+}
+
+function buildBgCode() {
+  var el = document.getElementById('bg-code');
+  if (!el) return;
+  var lines = [
+    'public class JavaType {',
+    '  String[] words = getWords();',
+    '  int wpm = calcWPM();',
+    '  float acc = calcAccuracy();',
+    '  ',
+    '  void play() {',
+    '    while (!finished) {',
+    '      type(nextWord());',
+    '    }',
+    '  }',
+    '}'
+  ];
+  el.textContent = lines.join('\n');
+}
+
+// ===== INITIALISATION GLOBALE =====
+buildMarquee();
+buildBgCode();
+rebuildWordList();

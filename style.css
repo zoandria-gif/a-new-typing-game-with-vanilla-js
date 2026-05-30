@@ -839,6 +839,77 @@ body {
   margin-top: 14px;
   font-family: var(--font-mono);
 }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 300;
+}
+
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { border-color: var(--accent3); color: var(--accent3); }
+.toast.error { border-color: var(--accent); color: var(--accent); }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ===== FONT SIZE ===== */
+body.fs-small { font-size: 13px; }
+body.fs-large { font-size: 16px; }
+/* ===== MOT INCORRECT (rouge) ===== */
+#word-display .word-wrong { color: #f85149; text-decoration: underline wavy #f85149; }
+
+/* ===== BOUTON PAUSE ===== */
+.btn-pause {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-pause:hover { background: var(--accent4); color: #fff; border-color: var(--accent4); }
+.btn-pause.paused { background: var(--accent3); color: #0d1117; border-color: var(--accent3); }
+
+/* ===== OVERLAY DE PAUSE SUR LES MOTS ===== */
+#word-display.game-paused {
+  filter: blur(4px);
+  user-select: none;
+  pointer-events: none;
+  opacity: 0.5;
+  transition: filter 0.3s, opacity 0.3s;
+}
+
+/* ===== COMPTE À REBOURS : couleur rouge quand il reste peu de temps ===== */
+.gstat-val.countdown-urgent {
+  color: #f85149 !important;
+  animation: pulse-urgent 0.5s infinite alternate;
+}
+@keyframes pulse-urgent {
+  from { opacity: 1; }
+  to   { opacity: 0.5; }
+}
+
 /* ===== ABOUT PAGE ===== */
 #page-about { padding: 48px; }
 
