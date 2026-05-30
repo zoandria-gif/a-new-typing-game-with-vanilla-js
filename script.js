@@ -774,3 +774,45 @@ function buildBgCode() {
 buildMarquee();
 buildBgCode();
 rebuildWordList();
+
+// // ===== PARAMETRES INTERFACE VITESSE/STYLE =====
+function setTheme(t) {
+  settings.theme = t;
+  document.documentElement.setAttribute('data-theme', t);
+  var tog = document.getElementById('theme-toggle');
+  if (tog) { if (t === 'dark') { tog.classList.add('on'); } else { tog.classList.remove('on'); } }
+  var btnL = document.getElementById('theme-light-btn');
+  var btnD = document.getElementById('theme-dark-btn');
+  if(btnL) btnL.classList.toggle('active', t === 'light');
+  if(btnD) btnD.classList.toggle('active', t === 'dark');
+}
+
+function toggleTheme() {
+  setTheme(settings.theme === 'dark' ? 'light' : 'dark');
+}
+
+function setAccent(color, el) {
+  settings.accent = color;
+  document.documentElement.style.setProperty('--accent', color);
+  document.querySelectorAll('.color-swatch').forEach(function(s) { s.classList.remove('active'); });
+  if (el) el.classList.add('active');
+}
+
+function setFontSize(size) {
+  settings.fontSize = size;
+  document.body.classList.remove('fs-small', 'fs-large');
+  if (size === 'small') document.body.classList.add('fs-small');
+  if (size === 'large') document.body.classList.add('fs-large');
+}
+
+function setLang(l) {
+  settings.lang = l;
+  var lfr = document.getElementById('lang-fr');
+  var len = document.getElementById('lang-en');
+  if(lfr) lfr.classList.toggle('active', l === 'fr');
+  if(len) len.classList.toggle('active', l === 'en');
+  var sel = document.getElementById('lang-select');
+  if (sel) sel.value = l;
+  rebuildWordList();
+  showTip();
+}
