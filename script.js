@@ -110,7 +110,7 @@ function navigate(page) {
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
   document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
   document.getElementById('page-' + page).classList.add('active');
-  var navEl = document.querySelector('[data-page="' + page + '"]');
+  let navEl = document.querySelector('[data-page="' + page + '"]');
   if (navEl) navEl.classList.add('active');
   window.scrollTo(0, 0);
   if (page === 'game') {
@@ -285,11 +285,11 @@ let settings = {
 
 // ===== ETAT DU JEU =====
 let gameState = {
-  words: [],           
-  currentIndex: 0,     
-  startTime: null,     
-  totalTypedKeys: 0,   
-  correctTypedKeys: 0, 
+  words: [],
+  currentIndex: 0,
+  startTime: null,
+  totalTypedKeys: 0,
+  correctTypedKeys: 0,
   isRunning: false,
   isPaused: false,
   timerInterval: null,
@@ -299,17 +299,17 @@ let gameState = {
   countdownLeft: 0,
   countdownInterval: null,
 
-  defPool: [],        
-  defPoolIndex: 0,    
-  batchSize: 3        
+  defPool: [],
+  defPoolIndex: 0,
+  batchSize: 3
 };
 
 // ===== LOGIQUE FLUX DE TEXTE =====
 function shuffle(arr) {
-  var a = arr.slice();
-  for (var i = a.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  let a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    let tmp = a[i]; a[i] = a[j]; a[j] = tmp;
   }
   return a;
 }
@@ -319,7 +319,7 @@ function getDiff()  { return document.getElementById('mode-select').value; }
 function isCountdownMode() { return document.getElementById('timer-select').value !== 'words'; }
 
 function getCountdownSeconds() {
-  var val = document.getElementById('timer-select').value;
+  let val = document.getElementById('timer-select').value;
   if (val === '30')  return 30;
   if (val === '60')  return 60;
   if (val === '90')  return 90;
@@ -330,11 +330,11 @@ function getCountdownSeconds() {
 function rebuildWordList() {
   stopAllTimers();
 
-  var lang = getLang();
-  var diff = getDiff();
-  var pool = shuffle(WORDS[diff][lang]);
+  let lang = getLang();
+  let diff = getDiff();
+  let pool = shuffle(WORDS[diff][lang]);
 
-  var batchSize = 3;
+  let batchSize = 3;
   if (!isCountdownMode()) {
     if (diff === 'easy') batchSize = 3;
     else if (diff === 'medium') batchSize = 5;
@@ -358,20 +358,20 @@ function rebuildWordList() {
 
   settings.lang = lang;
 
-  var countSel = document.getElementById('count-select');
+  let countSel = document.getElementById('count-select');
   if (countSel) countSel.style.display = 'none';
 
   document.getElementById('live-wpm').textContent = '—';
   document.getElementById('live-acc').textContent = '—';
   document.getElementById('live-words').textContent = '0';
 
-  var liveTimeEl = document.getElementById('live-time');
+  let liveTimeEl = document.getElementById('live-time');
   if(liveTimeEl) {
     liveTimeEl.classList.remove('countdown-urgent');
     liveTimeEl.textContent = gameState.countdownMode ? gameState.countdownSeconds + 's' : '0s';
   }
 
-  var inputField = document.getElementById('input-field');
+  let inputField = document.getElementById('input-field');
   inputField.value = '';
   inputField.disabled = false;
   inputField.classList.remove('input-error');
@@ -382,14 +382,14 @@ function rebuildWordList() {
 }
 
 function buildTokensFromPool() {
-  var flat = [];
-  for (var b = 0; b < gameState.batchSize; b++) {
-    var def = gameState.defPool[gameState.defPoolIndex % gameState.defPool.length];
-    var tokens = def.split(' ');
-    for (var t = 0; t < tokens.length; t++) {
-      flat.push({ 
-        text: tokens[t], 
-        defIndex: b, 
+  let flat = [];
+  for (let b = 0; b < gameState.batchSize; b++) {
+    let def = gameState.defPool[gameState.defPoolIndex % gameState.defPool.length];
+    let tokens = def.split(' ');
+    for (let t = 0; t < tokens.length; t++) {
+      flat.push({
+        text: tokens[t],
+        defIndex: b,
         correct: undefined,
         isLastOfDef: (t === tokens.length - 1)
       });
@@ -402,37 +402,36 @@ function buildTokensFromPool() {
 function loadNextBatch() {
   gameState.words = buildTokensFromPool();
   gameState.currentIndex = 0;
-  var inputField = document.getElementById('input-field');
+  let inputField = document.getElementById('input-field');
   inputField.value = '';
   inputField.classList.remove('input-error');
   renderWords();
 }
 
-
 // ===== AFFICHAGE ET RENDU DYNAMIQUE DES MOTS =====
 function renderWords() {
-  var display = document.getElementById('word-display');
+  let display = document.getElementById('word-display');
   if (!display) return;
   display.style.fontFamily = settings.gameFont;
   display.innerHTML = '';
 
-  var lastDefIndex = -1;
+  let lastDefIndex = -1;
 
-  for (var i = 0; i < gameState.words.length; i++) {
-    var word = gameState.words[i];
+  for (let i = 0; i < gameState.words.length; i++) {
+    let word = gameState.words[i];
 
     if (word.defIndex !== lastDefIndex) {
       if (lastDefIndex !== -1) {
-        var sep = document.createElement('div');
+        let sep = document.createElement('div');
         sep.className = 'def-separator';
         display.appendChild(sep);
       }
       lastDefIndex = word.defIndex;
     }
 
-    var span = document.createElement('span');
+    let span = document.createElement('span');
     span.id = 'w-' + i;
-    span.style.whiteSpace = 'pre-wrap'; 
+    span.style.whiteSpace = 'pre-wrap';
 
     if (i < gameState.currentIndex) {
       span.className = word.correct ? 'word-done' : 'word-wrong';
@@ -442,57 +441,57 @@ function renderWords() {
       span.className = 'word-pending';
     }
 
-    var baseText = word.text + (word.isLastOfDef ? '' : ' ');
+    let baseText = word.text + (word.isLastOfDef ? '' : ' ');
     span.textContent = baseText;
 
     display.appendChild(span);
   }
 
-  var cur = document.getElementById('w-' + gameState.currentIndex);
+  let cur = document.getElementById('w-' + gameState.currentIndex);
   if (cur) cur.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 
   updateProgress();
 }
 
 function renderCurrentWord(typed) {
-  var span = document.getElementById('w-' + gameState.currentIndex);
+  let span = document.getElementById('w-' + gameState.currentIndex);
   if (!span) return;
-  
-  var wordData = gameState.words[gameState.currentIndex];
-  var target = wordData.text + (wordData.isLastOfDef ? '' : ' ');
-  
+
+  let wordData = gameState.words[gameState.currentIndex];
+  let target = wordData.text + (wordData.isLastOfDef ? '' : ' ');
+
   span.innerHTML = '';
 
-  for (var i = 0; i < target.length; i++) {
-    var charSpan = document.createElement('span');
+  for (let i = 0; i < target.length; i++) {
+    let charSpan = document.createElement('span');
     charSpan.textContent = target[i];
-    
+
     if (target[i] === ' ') {
       charSpan.style.whiteSpace = 'pre';
     }
 
     if (i < typed.length) {
-      var ok = typed[i] === target[i];
+      let ok = typed[i] === target[i];
       charSpan.className = ok ? 'char-ok' : 'char-err';
     }
-    
+
     span.appendChild(charSpan);
   }
 }
 
 // ===== CHRONOMETRES ET STATISTIQUES =====
 function updateProgress() {
-  var pct = (gameState.currentIndex / gameState.words.length) * 100;
-  var fill = document.getElementById('progress-fill');
+  let pct = (gameState.currentIndex / gameState.words.length) * 100;
+  let fill = document.getElementById('progress-fill');
   if(fill) fill.style.width = pct + '%';
 }
 
 function startElapsedTimer() {
   gameState.timerInterval = setInterval(function() {
     if (gameState.isPaused) return;
-    
-    var elapsed = Math.round((Date.now() - gameState.startTime) / 1000);
-    var timeEl = document.getElementById('live-time');
+
+    let elapsed = Math.round((Date.now() - gameState.startTime) / 1000);
+    let timeEl = document.getElementById('live-time');
     if (timeEl) timeEl.textContent = elapsed + 's';
 
     updateLiveStats();
@@ -501,7 +500,7 @@ function startElapsedTimer() {
 
 function startCountdownTimer() {
   gameState.countdownLeft = gameState.countdownSeconds;
-  var timeEl = document.getElementById('live-time');
+  let timeEl = document.getElementById('live-time');
   if(timeEl) timeEl.textContent = gameState.countdownLeft + 's';
 
   gameState.countdownInterval = setInterval(function() {
@@ -534,7 +533,7 @@ function stopAllTimers() {
 function updateLiveStats() {
   if (!gameState.startTime) return;
 
-  var elapsed;
+  let elapsed;
   if (gameState.countdownMode) {
     elapsed = gameState.countdownSeconds - gameState.countdownLeft;
   } else {
@@ -543,11 +542,11 @@ function updateLiveStats() {
 
   if (elapsed < 0.1) return;
 
-  var wpm = Math.round((gameState.correctTypedKeys / 5) / (elapsed / 60));
+  let wpm = Math.round((gameState.correctTypedKeys / 5) / (elapsed / 60));
   document.getElementById('live-wpm').textContent = wpm;
 
   if (gameState.totalTypedKeys > 0) {
-    var acc = Math.round((gameState.correctTypedKeys / gameState.totalTypedKeys) * 100);
+    let acc = Math.round((gameState.correctTypedKeys / gameState.totalTypedKeys) * 100);
     document.getElementById('live-acc').textContent = acc + '%';
   }
 
@@ -559,8 +558,8 @@ function togglePause() {
   if (!gameState.isRunning) return;
 
   gameState.isPaused = !gameState.isPaused;
-  var btn = document.getElementById('pause-btn');
-  var inputField = document.getElementById('input-field');
+  let btn = document.getElementById('pause-btn');
+  let inputField = document.getElementById('input-field');
 
   if (gameState.isPaused) {
     if(btn) { btn.innerHTML = '<i class="fa-solid fa-play"></i> Reprendre'; btn.classList.add('paused'); }
@@ -577,7 +576,7 @@ function togglePause() {
 }
 
 function hidePauseButton() {
-  var btn = document.getElementById('pause-btn');
+  let btn = document.getElementById('pause-btn');
   if (btn) {
     btn.style.display = 'none';
     btn.innerHTML = '<i class="fa-solid fa-pause"></i> Pause';
@@ -587,7 +586,7 @@ function hidePauseButton() {
 }
 
 function showPauseButton() {
-  var btn = document.getElementById('pause-btn');
+  let btn = document.getElementById('pause-btn');
   if (btn) btn.style.display = 'inline-flex';
 }
 
@@ -599,22 +598,22 @@ function finishGame() {
 
   document.getElementById('input-field').disabled = true;
 
-  var elapsed;
+  let elapsed;
   if (gameState.countdownMode) {
     elapsed = gameState.countdownSeconds;
   } else {
     elapsed = (Date.now() - gameState.startTime) / 1000;
   }
 
-  var wpm = elapsed > 0 ? Math.round((gameState.correctTypedKeys / 5) / (elapsed / 60)) : 0;
-  var acc = gameState.totalTypedKeys > 0 ? Math.round((gameState.correctTypedKeys / gameState.totalTypedKeys) * 100) : 100;
+  let wpm = elapsed > 0 ? Math.round((gameState.correctTypedKeys / 5) / (elapsed / 60)) : 0;
+  let acc = gameState.totalTypedKeys > 0 ? Math.round((gameState.correctTypedKeys / gameState.totalTypedKeys) * 100) : 100;
 
   document.getElementById('res-wpm').textContent = wpm;
   document.getElementById('res-acc').textContent = acc + '%';
   document.getElementById('res-words').textContent = gameState.currentIndex;
   document.getElementById('res-time').textContent = Math.round(elapsed) + 's';
 
-  var msg;
+  let msg;
   if (wpm >= 80)      msg = '🔥 Incroyable ! Vous etes un vrai pro Java !';
   else if (wpm >= 60) msg = '<i class="fa-solid fa-bolt"></i> Excellent ! Votre vitesse est impressionnante !';
   else if (wpm >= 40) msg = '👍 Bien joue ! Continuez a pratiquer !';
@@ -673,9 +672,9 @@ document.getElementById('input-field').addEventListener('keydown', function(e) {
     return;
   }
 
-  var wordData = gameState.words[gameState.currentIndex];
-  var expectedText = wordData.text + (wordData.isLastOfDef ? ' ' : ' ');
-  var typedValue = this.value;
+  let wordData = gameState.words[gameState.currentIndex];
+  let expectedText = wordData.text + (wordData.isLastOfDef ? ' ' : ' ');
+  let typedValue = this.value;
 
   if (e.key === ' ') {
     e.preventDefault();
@@ -685,7 +684,7 @@ document.getElementById('input-field').addEventListener('keydown', function(e) {
     typedValue += ' ';
 
     gameState.totalTypedKeys += Math.max(typedValue.length, expectedText.length);
-    for (var i = 0; i < Math.min(typedValue.length, expectedText.length); i++) {
+    for (let i = 0; i < Math.min(typedValue.length, expectedText.length); i++) {
       if (typedValue[i] === expectedText[i]) {
         gameState.correctTypedKeys++;
       }
@@ -710,21 +709,21 @@ document.getElementById('input-field').addEventListener('keydown', function(e) {
 
 document.getElementById('input-field').addEventListener('input', function() {
   if (gameState.isPaused) return;
-  
-  var typed = this.value;
-  var wordData = gameState.words[gameState.currentIndex];
+
+  let typed = this.value;
+  let wordData = gameState.words[gameState.currentIndex];
   if (!wordData) return;
 
-  var expected = wordData.text + (wordData.isLastOfDef ? ' ' : ' ');
-  var isError = typed.length > 0 && !expected.startsWith(typed);
-  
+  let expected = wordData.text + (wordData.isLastOfDef ? ' ' : ' ');
+  let isError = typed.length > 0 && !expected.startsWith(typed);
+
   this.classList.toggle('input-error', isError);
   renderCurrentWord(typed);
 });
 
 // ===== MARQUEE ET EFFETS VISUELS DE FOND =====
 function showToast(msg, type) {
-  var t = document.getElementById('toast');
+  let t = document.getElementById('toast');
   if(!t) return;
   t.textContent = msg;
   t.className = 'toast show ' + (type || '');
@@ -732,19 +731,19 @@ function showToast(msg, type) {
 }
 
 function buildMarquee() {
-  var items = [].concat(WORDS.easy.fr, WORDS.medium.fr, WORDS.hard.fr,
+  let items = [].concat(WORDS.easy.fr, WORDS.medium.fr, WORDS.hard.fr,
                         WORDS.easy.fr, WORDS.medium.fr, WORDS.hard.fr);
-  var track = document.getElementById('marquee-track');
+  let track = document.getElementById('marquee-track');
   if (!track) return;
   track.innerHTML = '';
   items.forEach(function(w) {
-    var el = document.createElement('div');
+    let el = document.createElement('div');
     el.className = 'marquee-item';
     el.innerHTML = '<span>' + w + '</span>';
     track.appendChild(el);
   });
   items.forEach(function(w) {
-    var el = document.createElement('div');
+    let el = document.createElement('div');
     el.className = 'marquee-item';
     el.innerHTML = '<span>' + w + '</span>';
     track.appendChild(el);
@@ -752,9 +751,9 @@ function buildMarquee() {
 }
 
 function buildBgCode() {
-  var el = document.getElementById('bg-code');
+  let el = document.getElementById('bg-code');
   if (!el) return;
-  var lines = [
+  let lines = [
     'public class JavaType {',
     '  String[] words = getWords();',
     '  int wpm = calcWPM();',
@@ -779,10 +778,10 @@ rebuildWordList();
 function setTheme(t) {
   settings.theme = t;
   document.documentElement.setAttribute('data-theme', t);
-  var tog = document.getElementById('theme-toggle');
+  let tog = document.getElementById('theme-toggle');
   if (tog) { if (t === 'dark') { tog.classList.add('on'); } else { tog.classList.remove('on'); } }
-  var btnL = document.getElementById('theme-light-btn');
-  var btnD = document.getElementById('theme-dark-btn');
+  let btnL = document.getElementById('theme-light-btn');
+  let btnD = document.getElementById('theme-dark-btn');
   if(btnL) btnL.classList.toggle('active', t === 'light');
   if(btnD) btnD.classList.toggle('active', t === 'dark');
 }
@@ -813,23 +812,23 @@ function setFontSize(size) {
 
 function setLang(l) {
   settings.lang = l;
-  var lfr = document.getElementById('lang-fr');
-  var len = document.getElementById('lang-en');
+  let lfr = document.getElementById('lang-fr');
+  let len = document.getElementById('lang-en');
   if(lfr) lfr.classList.toggle('active', l === 'fr');
   if(len) len.classList.toggle('active', l === 'en');
-  var sel = document.getElementById('lang-select');
+  let sel = document.getElementById('lang-select');
   if (sel) sel.value = l;
   rebuildWordList();
   showTip();
 }
 
 // ===== EFFET SONORE AUDIO =====
-var audioCtx = null;
+let audioCtx = null;
 function playClick() {
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    var o = audioCtx.createOscillator();
-    var g = audioCtx.createGain();
+    let o = audioCtx.createOscillator();
+    let g = audioCtx.createGain();
     o.connect(g); g.connect(audioCtx.destination);
     o.frequency.value = 800;
     g.gain.setValueAtTime(0.1, audioCtx.currentTime);
@@ -840,34 +839,34 @@ function playClick() {
 
 function toggleSound() {
   settings.sound = !settings.sound;
-  var tog = document.getElementById('sound-toggle');
+  let tog = document.getElementById('sound-toggle');
   if(tog) tog.classList.toggle('on', settings.sound);
-  var lbl = document.getElementById('sound-label');
+  let lbl = document.getElementById('sound-label');
   if(lbl) lbl.textContent = settings.sound ? 'active' : 'desactive';
 }
 
 function toggleTips() {
   settings.tips = !settings.tips;
-  var tog = document.getElementById('tips-toggle');
+  let tog = document.getElementById('tips-toggle');
   if(tog) tog.classList.toggle('on', settings.tips);
-  var lbl = document.getElementById('tips-label');
+  let lbl = document.getElementById('tips-label');
   if(lbl) lbl.textContent = settings.tips ? 'active' : 'desactive';
-  var gtip = document.getElementById('game-tip');
+  let gtip = document.getElementById('game-tip');
   if(gtip) gtip.style.display = settings.tips ? 'block' : 'none';
 }
 
 function showTip() {
-  var tips = TIPS[settings.lang] || TIPS.fr;
-  var tip = tips[Math.floor(Math.random() * tips.length)];
-  var tipEl = document.getElementById('tip-text');
+  let tips = TIPS[settings.lang] || TIPS.fr;
+  let tip = tips[Math.floor(Math.random() * tips.length)];
+  let tipEl = document.getElementById('tip-text');
   if (tipEl) tipEl.textContent = tip;
 }
 
 function setGameFont(font) {
   settings.gameFont = font;
-  var preview = document.getElementById('font-preview');
+  let preview = document.getElementById('font-preview');
   if (preview) preview.style.fontFamily = font;
-  var wd = document.getElementById('word-display');
+  let wd = document.getElementById('word-display');
   if (wd) wd.style.fontFamily = font;
 
   // Mise à jour du bouton actif
@@ -881,7 +880,7 @@ function setGameFont(font) {
 
 // ===== GESTION DES AVATARS ET COMPTES =====
 let tempAvatarData = null;
- 
+
 function handleAvatar(e) {
   let file = e.target.files[0];
   if (!file) return;
@@ -893,7 +892,7 @@ function handleAvatar(e) {
   };
   reader.readAsDataURL(file);
 }
- 
+
 function switchTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(function(t, i) {
     t.classList.toggle('active', (tab === 'login' && i === 0) || (tab === 'register' && i === 1));
@@ -903,12 +902,12 @@ function switchTab(tab) {
   if(fl) fl.classList.toggle('active', tab === 'login');
   if(fr) fr.classList.toggle('active', tab === 'register');
 }
- 
+
 function doLogin() {
   let username = document.getElementById('login-username').value.trim();
   let password = document.getElementById('login-password').value;
   if (!username || !password) { showToast('Remplissez tous les champs', 'error'); return; }
- 
+
   // Lecture des informations stockées dans la session courante
   let stored = JSON.parse(sessionStorage.getItem('jt_user') || 'null');
   if (stored && stored.username === username && stored.password === password) {
@@ -917,24 +916,24 @@ function doLogin() {
     showToast('Compte introuvable dans cette session ou mot de passe incorrect.', 'error');
   }
 }
- 
+
 function doRegister() {
   let name     = document.getElementById('reg-name').value.trim();
   let username = document.getElementById('reg-username').value.trim();
   let password = document.getElementById('reg-password').value;
   if (!name || !username || !password) { showToast('Remplissez tous les champs', 'error'); return; }
- 
+
   let user = { name: name, username: username, password: password, avatar: tempAvatarData };
- 
+
   // Sauvegarde persistante UNIQUEMENT pour la session de l'onglet
   sessionStorage.setItem('jt_user', JSON.stringify(user));
   loginUser(user);
 }
- 
+
 function loginUser(user) {
   // Flag d'état actif pour autoriser la connexion automatique au rechargement (F5)
   sessionStorage.setItem('jt_logged_in', 'true');
- 
+
   let badge = document.getElementById('user-badge');
   if(badge) badge.classList.add('show');
   let nameEl = document.getElementById('ub-name-el');
@@ -955,12 +954,12 @@ function loginUser(user) {
   showToast('Bienvenue, ' + (user.name || user.username) + ' !', 'success');
   navigate('home');
 }
- 
+
 function logout() {
   // On supprime l'état connecté, mais on NE SUPPRIME PAS jt_user du sessionStorage.
   // Le compte reste disponible si l'utilisateur utilise l'interface de Login dans le même onglet.
   sessionStorage.removeItem('jt_logged_in');
- 
+
   let badge = document.getElementById('user-badge');
   if(badge) badge.classList.remove('show');
   let navLog = document.getElementById('nav-login');
@@ -971,7 +970,7 @@ function logout() {
 // Reconnexion automatique uniquement si le flag connecté est encore présent (perdu à la fermeture ou déconnexion)
 let savedUser = JSON.parse(sessionStorage.getItem('jt_user') || 'null');
 let isLoggedIn = sessionStorage.getItem('jt_logged_in') === 'true';
- 
+
 if (savedUser && isLoggedIn) {
   loginUser(savedUser);
 }
