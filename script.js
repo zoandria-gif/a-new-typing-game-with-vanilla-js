@@ -878,3 +878,100 @@ function setGameFont(font) {
   else if (font === 'Courier New') document.getElementById('font-courier-btn').classList.add('active');
   else if (font === 'monospace')   document.getElementById('font-mono-btn').classList.add('active');
 }
+
+// ===== GESTION DES AVATARS ET COMPTES =====
+let tempAvatarData = null;
+ 
+function handleAvatar(e) {
+  let file = e.target.files[0];
+  if (!file) return;
+  let reader = new FileReader();
+  reader.onload = function(ev) {
+    tempAvatarData = ev.target.result;
+    let prev = document.getElementById('avatar-preview');
+    if(prev) prev.innerHTML = '<img src="' + ev.target.result + '" alt="avatar">';
+  };
+  reader.readAsDataURL(file);
+}
+ 
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(function(t, i) {
+    t.classList.toggle('active', (tab === 'login' && i === 0) || (tab === 'register' && i === 1));
+  });
+  let fl = document.getElementById('form-login');
+  let fr = document.getElementById('form-register');
+  if(fl) fl.classList.toggle('active', tab === 'login');
+  if(fr) fr.classList.toggle('active', tab === 'register');
+}
+ 
+function doLogin() {
+  let username = document.getElementById('login-username').value.trim();
+  let password = document.getElementById('login-password').value;
+  if (!username || !password) { showToast('Remplissez tous les champs', 'error'); return; }
+ 
+  // Lecture des informations stockées dans la session courante
+  let stored = JSON.parse(sessionStorage.getItem('jt_user') || 'null');
+  if (stored && stored.username === username && stored.password === password) {
+    loginUser(stored);
+  } else {
+    showToast('Compte introuvable dans cette session ou mot de passe incorrect.', 'error');
+  }
+}
+ 
+function doRegister() {
+  let name     = document.getElementById('reg-name').value.trim();
+  let username = document.getElementById('reg-username').value.trim();
+  let password = document.getElementById('reg-password').value;
+  if (!name || !username || !password) { showToast('Remplissez tous les champs', 'error'); return; }
+ 
+  let user = { name: name, username: username, password: password, avatar: tempAvatarData };
+ 
+  // Sauvegarde persistante UNIQUEMENT pour la session de l'onglet
+  sessionStorage.setItem('jt_user', JSON.stringify(user));
+  loginUser(user);
+}
+ 
+function loginUser(user) {
+  // Flag d'état actif pour autoriser la connexion automatique au rechargement (F5)
+  sessionStorage.setItem('jt_logged_in', 'true');
+ 
+  let badge = document.getElementById('user-badge');
+  if(badge) badge.classList.add('show');
+  let nameEl = document.getElementById('ub-name-el');
+  if(nameEl) nameEl.textContent = user.name || user.username;
+  let initials = (user.name || user.username).slice(0, 2).toUpperCase();
+  let avatarEl = document.getElementById('ub-avatar-el');
+  if (avatarEl) {
+    if (user.avatar) {
+      avatarEl.innerHTML = '<img src="' + user.avatar + '" alt="avatar">';
+    } else {
+      avatarEl.innerHTML = '<span>' + initials + '</span>';
+      let initEl = document.getElementById('ub-initials');
+      if(initEl) initEl.textContent = initials;
+    }
+  }
+  let navLog = document.getElementById('nav-login');
+  if(navLog) navLog.style.display = 'none';
+  showToast('Bienvenue, ' + (user.name || user.username) + ' !', 'success');
+  navigate('home');
+}
+ 
+function logout() {
+  // On supprime l'état connecté, mais on NE SUPPRIME PAS jt_user du sessionStorage.
+  // Le compte reste disponible si l'utilisateur utilise l'interface de Login dans le même onglet.
+  sessionStorage.removeItem('jt_logged_in');
+ 
+  let badge = document.getElementById('user-badge');
+  if(badge) badge.classList.remove('show');
+  let navLog = document.getElementById('nav-login');
+  if(navLog) navLog.style.display = 'flex';
+  showToast('Deconnecte', 'success');
+}
+
+// Reconnexion automatique uniquement si le flag connecté est encore présent (perdu à la fermeture ou déconnexion)
+let savedUser = JSON.parse(sessionStorage.getItem('jt_user') || 'null');
+let isLoggedIn = sessionStorage.getItem('jt_logged_in') === 'true';
+ 
+if (savedUser && isLoggedIn) {
+  loginUser(savedUser);
+}
