@@ -33,20 +33,20 @@
     <nav class="sidebar-nav">
       <div class="nav-section-label">Navigation</div>
       <button class="nav-item active" data-page="home">
-        <span class="nav-icon">🏠</span> Accueil
+        <span class="nav-icon"><i class="fa-solid fa-house-chimney"></i></span> Accueil
       </button>
       <button class="nav-item" data-page="game">
-        <span class="nav-icon">⌨️</span> Jeu
+        <span class="nav-icon"><i class="fa-solid fa-keyboard"></i></span> Jeu
         <span class="nav-badge">▶</span>
       </button>
       <button class="nav-item" data-page="about">
-        <span class="nav-icon">👥</span> À Propos
+        <span class="nav-icon"><i class="fa-solid fa-users"></i></span> À Propos
       </button>
       <button class="nav-item" data-page="settings">
-        <span class="nav-icon">⚙️</span> Paramètres
+        <span class="nav-icon"><i class="fa-solid fa-gear"></i></span> Paramètres
       </button>
       <button class="nav-item" data-page="login" id="nav-login">
-        <span class="nav-icon">🔑</span> Connexion
+        <span class="nav-icon"><i class="fa-solid fa-user"></i></span> Connexion
       </button>
     </nav>
 
@@ -72,12 +72,24 @@
 
     <!-- Top horizontal strip -->
     <div class="topbar">
-      <div class="topbar-chip" onclick="navigate('game')">⌨️ Nouvelle partie</div>
-      <div class="topbar-chip highlight" onclick="startGame('easy')">🟢 Mode facile</div>
-      <div class="topbar-chip" onclick="startGame('medium')">🟡 Mode moyen</div>
-      <div class="topbar-chip" onclick="startGame('hard')">🔴 Mode difficile</div>
-      <div class="topbar-chip" onclick="navigate('settings')">⚙️ Paramètres</div>
-      <div class="topbar-chip" onclick="navigate('about')">🇲🇬 Notre histoire</div>
+      <div class="topbar-chip" onclick="navigate('game')">
+        <i class="fa-solid fa-keyboard"></i> Nouvelle partie
+      </div>
+      <div class="topbar-chip highlight" onclick="startGame('easy')">
+        <i class="fa-solid fa-circle-check"></i> Mode facile
+      </div>
+      <div class="topbar-chip" onclick="startGame('medium')">
+        <i class="fa-solid fa-circle"></i> Mode moyen
+      </div>
+      <div class="topbar-chip" onclick="startGame('hard')">
+        <i class="fa-solid fa-circle-exclamation"></i> Mode difficile
+      </div>
+      <div class="topbar-chip" onclick="navigate('settings')">
+        <i class="fa-solid fa-gear"></i> Paramètres
+      </div>
+      <div class="topbar-chip" onclick="navigate('about')">
+        <i class="fa-solid fa-flag"></i> Notre histoire
+      </div>
     </div>
 
     <!-- ===== HOME PAGE ===== -->
@@ -157,22 +169,22 @@
         <p class="section-sub">Un jeu pensé pour les étudiants en informatique</p>
         <div class="features-grid">
           <div class="feature-card">
-            <div class="feature-icon fi-orange">☕</div>
+            <div class="feature-icon fi-orange"><i class="fa-solid fa-coffee"></i></div>
             <h3>Méthodes Java réelles</h3>
             <p>Tapez de vraies méthodes Java utilisées au quotidien. Apprenez la syntaxe naturellement.</p>
           </div>
           <div class="feature-card">
-            <div class="feature-icon fi-blue">📊</div>
+            <div class="feature-icon fi-blue"><i class="fa-solid fa-chart-line"></i></div>
             <h3>Stats en temps réel</h3>
             <p>WPM, précision et progression affichés instantanément pendant votre session.</p>
           </div>
           <div class="feature-card">
-            <div class="feature-icon fi-green">🎯</div>
+            <div class="feature-icon fi-green"><i class="fa-solid fa-bullseye"></i></div>
             <h3>3 niveaux de difficulté</h3>
             <p>Du débutant au confirmé. Progressez à votre rythme avec des méthodes de plus en plus complexes.</p>
           </div>
           <div class="feature-card">
-            <div class="feature-icon fi-purple">⚡</div>
+            <div class="feature-icon fi-purple"><i class="fa-solid fa-bolt"></i></div>
             <h3>Léger et rapide</h3>
             <p>Pas d'inscription requise. Ouvrez et commencez à taper. Simple et efficace.</p>
           </div>
@@ -412,19 +424,19 @@
             <div class="team-info">
               <h3>JIM Ramananarivo</h3>
               <div class="role">// Co-créateur · Logic & Game</div>
-              <p>Étudiant L1 Informatique à HEI Madagascar. Passionné par les algorithmes et la logique de jeu.</p>
+              <p>Étudiant L1 Informatique à HEI Madagascar. Passionné surtout par les algorithmes.</p>
             </div>
           </div>
         </div>
 
         <div class="about-grid">
           <div class="about-card">
-            <h2>🏫 HEI Madagascar</h2>
+            <h2><i class="fa-solid fa-school"></i> HEI Madagascar</h2>
             <p>Haute École d'Informatique (HEI) est une école d'ingénieurs en informatique basée à Antananarivo,
               capitale de Madagascar. Notre promotion L1 2025 est pleine de talents curieux et motivés.</p>
           </div>
           <div class="about-card">
-            <h2>💡 L'idée</h2>
+            <h2><i class="fa-solid fa-lightbulb"></i> L'idée</h2>
             <p>En cours de Java, on devait mémoriser des dizaines de méthodes. On s'est dit : et si on en faisait un jeu
               de dactylo ? Apprendre en tapant — mémorisation par la pratique répétée.</p>
           </div>
@@ -454,11 +466,11 @@
     <!-- ===== SETTINGS PAGE ===== -->
     <div id="page-settings" class="page">
       <div style="padding: 48px;">
-        <h1 class="settings-title">⚙️ Paramètres</h1>
+        <h1 class="settings-title"><i class="fa-solid fa-gear"></i> Paramètres</h1>
 
         <!-- Apparence -->
         <div class="settings-section">
-          <div class="settings-section-header">🎨 Apparence</div>
+          <div class="settings-section-header"><i class="fa-solid fa-palette"></i> Apparence</div>
 
           <div class="settings-row">
             <div class="settings-row-info">
@@ -467,8 +479,8 @@
             </div>
             <div class="settings-control">
               <div class="pill-select">
-                <button class="pill-opt" id="theme-light-btn" onclick="setTheme('light')">☀️ Clair</button>
-                <button class="pill-opt active" id="theme-dark-btn" onclick="setTheme('dark')">🌙 Sombre</button>
+                <button class="pill-opt" id="theme-light-btn" onclick="setTheme('light')"><i class="fa-solid fa-sun"></i> Clair</button>
+                <button class="pill-opt active" id="theme-dark-btn" onclick="setTheme('dark')"><i class="fa-solid fa-moon"></i> Sombre</button>
               </div>
             </div>
           </div>
@@ -512,7 +524,7 @@
 
         <!-- Jeu -->
         <div class="settings-section">
-          <div class="settings-section-header">⌨️ Jeu</div>
+          <div class="settings-section-header"><i class="fa-solid fa-gamepad"></i> Jeu</div>
 
           <div class="settings-row">
             <div class="settings-row-info">
@@ -569,7 +581,7 @@
 
         <!-- Preview -->
         <div class="settings-section">
-          <div class="settings-section-header">👁️ Aperçu</div>
+          <div class="settings-section-header"><i class="fa-solid fa-eye"></i> Aperçu</div>
           <div style="padding: 20px;">
             <div class="font-preview" id="font-preview">
               toString() hashCode() equals() getClass() length()

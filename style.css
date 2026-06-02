@@ -1296,7 +1296,7 @@ body.fs-large  #input-field { font-size: 1.25rem; }
 }
 
 .social-btn::after {
-  content: '(bientôt disponible)';
+
   position: absolute;
   right: 12px;
   font-size: 10px;
