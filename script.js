@@ -639,6 +639,17 @@ function restartGame() {
 function startGame(mode) {
   navigate('game');
   document.getElementById('mode-select').value = mode;
+
+  // Déplacer le highlight vers le bon niveau
+  document.querySelectorAll('.topbar-chip').forEach(function(chip) {
+    chip.classList.remove('highlight');
+  });
+  document.querySelectorAll('.topbar-chip[onclick]').forEach(function(chip) {
+    if (chip.getAttribute('onclick') === "startGame('" + mode + "')") {
+      chip.classList.add('highlight');
+    }
+  });
+
   setTimeout(rebuildWordList, 50);
 }
 
